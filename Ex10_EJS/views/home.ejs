@@ -1,51 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include('partials/head')%>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="Ex10_EJS\public\js\bootstrap.js">
-    <!-- <script src="/js/jquery-3.6.0.min.js"></script> -->
-    <script src="Ex10_EJS\public\js"></script>
+    <body>
+        <%- include('partials/navBar') %>
+            <h1>This is home page</h1>
+            <button class="btn btn-primary">click</button>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. At reprehenderit inventore soluta ab nesciunt deleniti provident, tempora magnam aut animi corrupti explicabo reiciendis, nam qui quisquam, fuga nisi exercitationem quas. Facilis adipisci
+                aliquid temporibus, accusamus accusantium debitis ducimus ipsam officiis! Deserunt mollitia unde asperiores vel. Nisi qui iure possimus sunt iste, tempora suscipit earum aliquam quisquam, delectus, illum minus dolores. Perferendis voluptatibus
+                autem dicta harum voluptate fugiat ad labore, assumenda, a id repellat, vero deleniti quibusdam! Labore iure, ab modi quia rem cupiditate reprehenderit dolores similique exercitationem adipisci molestiae non?</p>
+    </body>
 
-    <title>Document</title>
-</head>
-
-<body>
-    <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Active</a>
-        </li>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Dropdown</a>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="#">Separated link</a></li>
-            </ul>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link disabled">Disabled</a>
-        </li>
-    </ul>
-    <h1>
-        <%= name %>
-    </h1>
-    <p>
-        <%=description %>
-    </p>
-    <p>
-        <%=subscribers %>
-    </p>
-
-</body>
-
-</html>
+    </html>
