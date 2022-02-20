@@ -3,8 +3,7 @@
         "name": "Soccer",
         "subscribers": 800000,
         "description": "The football subreddit. News, results and discussion about the beautiful game.",
-        "posts": [
-            {
+        "posts": [{
                 "title": "Marten de Roon to make pizza for more than 1,000 people in Bergamo if Atalanta win the Champions league.",
                 "author": "joeextreme"
             },
@@ -22,8 +21,7 @@
         "name": "Chickens",
         "subscribers": 23956,
         "description": "A place to post your photos, video and questions about chickens!",
-        "posts": [
-            {
+        "posts": [{
                 "title": "Naughty chicken hid under a shed for 3 weeks and came home with 25 chicks today!",
                 "author": "joeextreme",
                 "img": "https://preview.redd.it/pcn8u4j7c9z61.jpg?width=960&crop=smart&auto=webp&s=e114976dde1108b9556555d2db36a3cb6211798d"
@@ -43,11 +41,10 @@
         "name": "Mighty Harvest",
         "subscribers": 44002,
         "description": "Feeding many villages and village idiots for 10s of days.",
-        "posts": [
-            {
+        "posts": [{
                 "title": "My first meyer lemon ripened today. Im so proud of the little guy. Banana for scale",
                 "author": "proudmamma",
-                "img": "https://preview.redd.it/1bz6we4j54941.jpg?width=640&crop=smart&auto=webp&s=a036ea99299f7737efde9f6c3bfa43893f5eaa00"
+                "img": "https:/ㄐㄧㄢ/preview.redd.it/1bz6we4j54941.jpg?width=640&crop=smart&auto=webp&s=a036ea99299f7737efde9f6c3bfa43893f5eaa00"
             },
             {
                 "title": "I think I overestimated the harvest basket size I needed.",
