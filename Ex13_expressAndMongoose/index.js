@@ -5,6 +5,7 @@ const path = require('path');
 const Product = require('./models/product');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override')
+const AppError = require('./AppError');
 
 main().catch(err => console.log(err));
 
@@ -21,7 +22,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 app.use(methodOverride('_method'))
 
+//Catch Async error
+function wrapAsync(fn) {
+    return function(req, res, next) {
+        fn(req, res, next).catch(e => next(e))
+    }
+}
 
+//Read - Main
 app.get('/', (req, res) => {
     res.send('Main page');
 });
@@ -32,11 +40,11 @@ app.get('/products/new', (req, res) => {
 });
 
 //Create - post
-app.post('/products', async(req, res) => {
+app.post('/products', wrapAsync(async(req, res) => {
     const newProduct = new Product(req.body);
     await newProduct.save();
     res.redirect(`/products/${newProduct._id}`);
-})
+}));
 
 //Read - all or categories
 app.get('/products', async(req, res) => {
@@ -51,11 +59,14 @@ app.get('/products', async(req, res) => {
 })
 
 //Read - by id
-app.get('/products/:id', async(req, res) => {
+app.get('/products/:id', wrapAsync(async(req, res, next) => {
     const { id } = req.params;
     const foundProduct = await Product.findById(id);
+    if (!foundProduct) {
+        throw new AppError(`Product ${id} not found`, 404);
+    }
     res.render('products/show', { product: foundProduct });
-})
+}))
 
 //Update - to edit page
 app.get('/products/:id/edit', async(req, res) => {
@@ -78,6 +89,22 @@ app.delete('/products/:id', async(req, res) => {
     const { id } = req.params;
     await Product.findByIdAndDelete(id);
     res.redirect('/products');
+})
+
+const handleValidationError = (err) => {
+    return new AppError('Validation error.... Please try again')
+}
+
+//Error handle - validate error
+app.use((err, req, res, next) => {
+    if (err.name === 'ValidationError') err = handleValidationError(err);
+    res.send(err.message)
+})
+
+//Error handle -all error
+app.use((err, req, res, next) => {
+    const { status = 500, message = 'Something went wrong' } = err;
+    res.status(status).send(message);
 })
 
 app.listen(3000, () => {
