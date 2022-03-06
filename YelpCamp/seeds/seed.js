@@ -15,14 +15,18 @@ const seedDB = async() => {
     await Campground.deleteMany({});
     for (let i = 0; i < 50; i++) {
         const random = Math.floor(Math.random() * 1000);
+        const randomPrice = Math.floor(Math.random() * 50) + 10;
         const camp = new Campground({
             location: `${cities[random].city}, ${cities[random].state}`,
-            title: `${getRandomValues(descriptors)} ${getRandomValues(places)}`
+            title: `${getRandomValues(descriptors)} ${getRandomValues(places)}`,
+            image: 'https://source.unsplash.com/collection/483251',
+            price: randomPrice,
+
         })
         await camp.save();
     }
 }
 
-seedDB().then() => {
+seedDB().then(() => {
     mongoose.connection.close();
-}
+})
