@@ -3,10 +3,12 @@ const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate')
-const Campground = require('./models/compground');
 const methodOverride = require('method-override');
+const { campgroundSchema } = require('./models/Schema')
+const Campground = require('./models/compground');
 const catchAsync = require('./utils/catchAsync')
-const ExpressError = require('./utils/ExpressError')
+const ExpressError = require('./utils/ExpressError');
+const { log } = require('console');
 
 //connet to mongo
 main().catch(err => console.log(err));
@@ -23,6 +25,18 @@ app.engine('ejs', ejsMate);
 app.get('/', (req, res) => {
     res.render('home')
 });
+
+//Error Handle - joi schema check error
+const validateCampground = (req, res, next) => {
+
+    const { error } = campgroundSchema.validate(req.body);
+    if (error) {
+        const message = error.details.map(errDetails => errDetails.message).join(', ');
+        throw new ExpressError(message, 400);
+    } else {
+        next();
+    }
+}
 
 //Read  - all
 app.get('/campgrounds', async(req, res) => {
@@ -43,8 +57,7 @@ app.get('/campgrounds/:id', catchAsync(async(req, res, next) => {
 }));
 
 //Create - post request
-app.post('/campgrounds', catchAsync(async(req, res) => {
-    if (!(req.body.campground)) throw new ExpressError('Your data is not available', 400);
+app.post('/campgrounds', validateCampground, catchAsync(async(req, res) => {
     const campground = new Campground(req.body.campground)
     await campground.save();
     res.redirect(`/campgrounds/${campground._id}`)
@@ -57,7 +70,8 @@ app.get('/campgrounds/:id/edit', async(req, res) => {
 })
 
 //Update - put request
-app.put('/campgrounds/:id', catchAsync(async(req, res) => {
+app.put('/campgrounds/:id', validateCampground, catchAsync(async(req, res) => {
+    if (!(req.body.campground)) throw new ExpressError('Your data is not available', 400);
     const campground = await Campground.findByIdAndUpdate(req.params.id, req.body.campground);
     res.redirect(`/campgrounds/${campground._id}`)
 }))
@@ -74,8 +88,9 @@ app.all('*', (req, res, next) => {
 
 //Error handling - undefind
 app.use((err, req, res, next) => {
-    const { statusCode = 500, message = 'Something went wrong' } = err;
-    res.status(statusCode).send(message);
+    const { statusCode = 500 } = err
+    if (!err.message) err.message = 'Something went wrong'
+    res.status(statusCode).render('error', { err });
 })
 
 app.listen(3000, () => {
