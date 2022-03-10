@@ -8,7 +8,6 @@ const { campgroundSchema } = require('./models/Schema')
 const Campground = require('./models/compground');
 const catchAsync = require('./utils/catchAsync')
 const ExpressError = require('./utils/ExpressError');
-const { log } = require('console');
 
 //connet to mongo
 main().catch(err => console.log(err));
@@ -28,7 +27,6 @@ app.get('/', (req, res) => {
 
 //Error Handle - joi schema check error
 const validateCampground = (req, res, next) => {
-
     const { error } = campgroundSchema.validate(req.body);
     if (error) {
         const message = error.details.map(errDetails => errDetails.message).join(', ');
@@ -82,11 +80,12 @@ app.delete('/campgrounds/:id', async(req, res) => {
     res.redirect('/campgrounds')
 })
 
+//Error handler - page not found
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404))
 })
 
-//Error handling - undefind
+//Error handler - undefind
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err
     if (!err.message) err.message = 'Something went wrong'
