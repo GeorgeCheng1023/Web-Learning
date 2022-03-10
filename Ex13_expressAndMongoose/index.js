@@ -42,10 +42,11 @@ app.post('/farms', wrapAsync(async(req, res) => {
     res.redirect(`/farms/${newFarm._id}`);
 }));
 
-app.get('farms/:id/products/new', wrapAsync(async(req, res) => {
-    const { id } = req.query;
-    res.render('products/new', { category_list, id })
-}))
+
+// app.get('farms/:id/products/new', wrapAsync(async(req, res) => {
+//     const { id } = req.query;
+//     res.render('products/new', { category_list, farmId: id })
+// }))
 
 //Read - all 
 app.get('/farms', async(req, res) => {
