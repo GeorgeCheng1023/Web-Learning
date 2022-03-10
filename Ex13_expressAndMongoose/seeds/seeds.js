@@ -1,10 +1,10 @@
 const { log } = require('console');
 const mongoose = require('mongoose');
-const Product = require('./models/product.js');
+const Product = require('./models/product');
 main().catch(err => console.log(err));
 
 async function main() {
-    await mongoose.connect('mongodb://localhost:27017/test');
+    await mongoose.connect('mongodb://localhost:27017/farm');
     console.log('mongoose connected');
 }
 
