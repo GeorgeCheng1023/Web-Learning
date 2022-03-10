@@ -1,28 +1,40 @@
 <% layout('./layouts/boilerplate')%>
+    <div class="container">
+        <div class="row">
+            <div class="col-4 offset-3">
+                <div class="card" style="width: 18rem;">
+                    <img src="<%=campground.image%>" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%= campground.title %>
+                        </h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item txt-muted">
+                            <%= campground.location%>
+                        </li>
+                    </ul>
+                    <div class="card-body">
+                        <a class="btn btn-primary" href="/campgrounds" class="card-link">Back</a>
+                        <a class="btn btn-warning" href="/campgrounds/<%=campground._id%>/edit" class="card-link">Edit</a>
+                        <form class="d-inline" action="/campgrounds/<%= campground._id%>?_method=DELETE" method="post">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
 
-    <div class="row">
-        <div class="col-6 offset-4">
-            <div class="card" style="width: 18rem;">
-                <img src="<%=campground.image%>" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <%= campground.title %>
-                    </h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                 </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item txt-muted">
-                        <%= campground.location%>
-                    </li>
-                </ul>
-                <div class="card-body">
-                    <a class="btn btn-primary" href="/campgrounds" class="card-link">Back</a>
-                    <a class="btn btn-warning" href="/campgrounds/<%=campground._id%>/edit" class="card-link">Edit</a>
-                    <form class="d-inline" action="/campgrounds/<%= campground._id%>?_method=DELETE" method="post">
-                        <button class="btn btn-danger">Delete</button>
-                    </form>
-                </div>
-
+                <form action="/campgrounds/<%=campground._id%>/reviews">
+                    <div class="mb-3">
+                        <label class="form-label" for="rating">Rating</label>
+                        <input class="form-range" name="review[rating]" type="range" min="1" max="5" step="1" id="rating">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="body">Content</label>
+                        <textarea class="form-control" name="review[body]" id="body" cols="15" rows="10"></textarea>
+                    </div>
+                    <button class="btn btn-primary">Submit</button>
+                </form>
             </div>
         </div>
     </div>

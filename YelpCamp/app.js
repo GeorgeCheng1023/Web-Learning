@@ -80,6 +80,12 @@ app.delete('/campgrounds/:id', async(req, res) => {
     res.redirect('/campgrounds')
 })
 
+//Read - get to reviews list
+app.get('/campgrounds/:id/reviews', catchAsync(async(req, res) => {
+    const foundCampground = await Campground.findById(req.params.id);
+    res.send(req.body);
+}))
+
 //Error handler - page not found
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404))
