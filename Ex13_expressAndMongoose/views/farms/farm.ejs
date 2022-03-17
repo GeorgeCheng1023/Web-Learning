@@ -11,16 +11,17 @@
 <body>
     <h1>
         All farm</h1>
-    <ul>
-        <% for (let farm of farms) { %>
-            <li>
-                <a href="/farms/<%= farm._id%>">
-                    <%= farm.name%>
-                </a>
-            </li>
-            <% } %>
-    </ul>
-    <a href="/farms/new ">New</a>
+    <%= messages%>
+        <ul>
+            <% for (let farm of farms) { %>
+                <li>
+                    <a href="/farms/<%= farm._id%>">
+                        <%= farm.name%>
+                    </a>
+                </li>
+                <% } %>
+        </ul>
+        <a href="/farms/new ">New</a>
 </body>
 
 </html>

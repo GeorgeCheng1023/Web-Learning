@@ -30,15 +30,15 @@ app.use('/campgrounds', campgroundRoutes);
 
 //Error Handle - joi schema check review
 const validateReview = (req, res, next) => {
-        const { error } = reviewSchema.validate(req.body);
-        if (error) {
-            const message = error.details.map(errDetails => errDetails.message).join(', ');
-            throw new ExpressError(message, 400);
-        } else {
-            next();
-        }
+    const { error } = reviewSchema.validate(req.body);
+    if (error) {
+        const message = error.details.map(errDetails => errDetails.message).join(', ');
+        throw new ExpressError(message, 400);
+    } else {
+        next();
     }
-    //Create review - get to reviews list
+};
+//Create review - get to reviews list
 app.post('/campgrounds/:id/reviews', validateReview, catchAsync(async(req, res) => {
     const { id } = req.params;
     const foundCampground = await Campground.findById(id);
