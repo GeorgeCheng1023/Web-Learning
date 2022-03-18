@@ -33,6 +33,11 @@ app.use(session({
     saveUninitialized: true
 }))
 
+app.use((req, res, next) => {
+    res.locals.messages = req.flash('success');
+    next()
+})
+
 //Read - Main
 app.get('/', (req, res) => {
     res.send('Main page');
@@ -54,15 +59,10 @@ app.post('/farms', wrapAsync(async(req, res) => {
 }));
 
 
-// app.get('farms/:id/products/new', wrapAsync(async(req, res) => {
-//     const { id } = req.query;
-//     res.render('products/new', { category_list, farmId: id })
-// }))
-
 //Read - all 
 app.get('/farms', async(req, res) => {
     const farms = await Farm.find({});
-    res.render('farms/farm.ejs', { farms, messages: req.flash('success') });
+    res.render('farms/farm.ejs', { farms });
 })
 
 //Read - by id
