@@ -6,7 +6,7 @@ const passport = require('passport');
 //get to regist page
 router.get('/register', (req, res, next) => {
     res.render('users/register');
-})
+});
 
 // post regist 
 router.post('/', async(req, res, next) => {
@@ -20,17 +20,17 @@ router.post('/', async(req, res, next) => {
         req.flash('error', 'Username or email already registered')
         res.redirect('/users/register');
     }
-})
+});
 
 //get to login page
 router.get('/login', async(req, res) => {
     res.render('users/login')
-})
+});
 
 //post login authentication
 router.post('/login', passport.authenticate('local', { failureRedirect: '/users/login', failureFlash: true }), async(req, res) => {
     req.flash('success', 'Welcome back!');
     res.redirect('/');
-})
+});
 
 module.exports = router;

@@ -1,10 +1,10 @@
-const passport = require('passport');
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync')
 const Campground = require('../models/compground');
 const { campgroundSchema } = require('../models/Schema');
 const ExpressError = require('../utils/ExpressError');
+const isLoggedIn = require('../utils/isLoggIn')
 
 //Error Handle - joi schema check campground
 const validateCampground = (req, res, next) => {
@@ -24,11 +24,7 @@ router.get('', async(req, res) => {
 });
 
 //Create a new
-router.get('/new', (req, res) => {
-    if (!req.isAuthenticated) {
-        req.flash('error', 'You must be logged in');
-        return res.redirect('/users/login');
-    }
+router.get('/new', isLoggedIn, (req, res) => {
     res.render('campgrounds/new');
 
 });
