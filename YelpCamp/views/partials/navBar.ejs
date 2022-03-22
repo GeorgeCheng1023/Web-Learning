@@ -14,10 +14,10 @@
                 <div class="navbar-nav ms-auto">
                     <div class="d-grid gap-2 d-md-block">
                         <% if (!currentUser) { %>
-                            <button class="btn btn-primary" type="button"><a href="/users/regist"></a>Regist</button>
-                            <button class="btn btn-success" type="button"><a href="/users/login"></a>Login</button>
+                            <a href="/users/regist"><button class="btn btn-primary" type="button">Regist</button></a>
+                            <a href="/users/login"><button class="btn btn-success" type="button">Login</button></a>
                             <% } else { %>
-                                <button class="btn btn-warning" type="button"><a href="/users/logout"></a>Logout</button>
+                                <a href="/users/logout"><button class="btn btn-warning" type="button">Logout</button></a>
                                 <% } %>
                     </div>
                 </div>
