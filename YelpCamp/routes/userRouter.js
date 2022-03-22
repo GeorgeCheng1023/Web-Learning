@@ -14,8 +14,11 @@ router.post('/', async(req, res, next) => {
         const { email, password, username } = req.body;
         const user = new User({ email, username });
         const registUser = await User.register(user, password);
-        req.flash('success', 'You have successfully registered')
-        res.redirect('/');
+        req.login(registUser, err => {
+            if (err) return next(err);
+            req.flash('success', 'You have successfully registered')
+            res.redirect('/');
+        })
     } catch (e) {
         req.flash('error', 'Username or email already registered')
         res.redirect('/users/regist');

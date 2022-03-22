@@ -70,20 +70,20 @@ app.get('/', (req, res) => {
 
 //use router
 app.use('/campgrounds', campgroundRouter);
-app.use('/campgrounds/:id/reviews/', reviewRouter)
+app.use('/campgrounds/:id/reviews/', reviewRouter);
 app.use('/users', userRouter);
 
 //Error handler - page not found
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404))
-})
+});
 
 //Error handler - undefind
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err
     if (!err.message) err.message = 'Something went wrong'
     res.status(statusCode).render('error', { err });
-})
+});
 
 app.listen(3000, () => {
     console.log("listening on port 3000");
