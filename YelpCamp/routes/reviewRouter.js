@@ -17,7 +17,7 @@ const validateReview = (req, res, next) => {
     }
 };
 //Create review - get to reviews list
-router.post('/', isLoggIn, validateReview, catchAsync(async(req, res) => {
+router.post('/', isLoggedIn, validateReview, catchAsync(async(req, res) => {
     const { id } = req.params;
     console.log(req.params.id);
     const foundCampground = await Campground.findById(id);
