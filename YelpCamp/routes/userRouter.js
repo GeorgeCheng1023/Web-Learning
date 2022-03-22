@@ -10,7 +10,6 @@ router.get('/register', (req, res, next) => {
 
 // post regist 
 router.post('/', async(req, res, next) => {
-    console.log(req.body)
     try {
         const { email, password, username } = req.body;
         const user = new User({ email, username });

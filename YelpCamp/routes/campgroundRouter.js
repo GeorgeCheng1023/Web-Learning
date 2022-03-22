@@ -1,3 +1,4 @@
+const passport = require('passport');
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync')
@@ -24,8 +25,13 @@ router.get('', async(req, res) => {
 
 //Create a new
 router.get('/new', (req, res) => {
-    res.render('campgrounds/new')
-})
+    if (!req.isAuthenticated) {
+        req.flash('error', 'You must be logged in');
+        return res.redirect('/users/login');
+    }
+    res.render('campgrounds/new');
+
+});
 
 //Read - id
 router.get('/:id', catchAsync(async(req, res, next) => {
