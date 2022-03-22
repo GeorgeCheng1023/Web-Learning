@@ -4,6 +4,7 @@ const catchAsync = require('../utils/catchAsync')
 const Campground = require('../models/compground');
 const Review = require('../models/review')
 const { reviewSchema } = require('../models/Schema');
+const isLoggedIn = require('../utils/isLoggIn');
 
 //Error Handle - joi schema check review
 const validateReview = (req, res, next) => {
@@ -16,7 +17,7 @@ const validateReview = (req, res, next) => {
     }
 };
 //Create review - get to reviews list
-router.post('/', validateReview, catchAsync(async(req, res) => {
+router.post('/', isLoggIn, validateReview, catchAsync(async(req, res) => {
     const { id } = req.params;
     console.log(req.params.id);
     const foundCampground = await Campground.findById(id);
