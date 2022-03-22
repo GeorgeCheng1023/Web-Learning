@@ -13,9 +13,12 @@
                 </div>
                 <div class="navbar-nav ms-auto">
                     <div class="d-grid gap-2 d-md-block">
-                        <button class="btn btn-primary" type="button"><a href="/users/regist"></a>Regist</button>
-                        <button class="btn btn-success" type="button"><a href="/users/login"></a>Login</button>
-                        <button class="btn btn-warning" type="button"><a href="/users/logout"></a>Logout</button>
+                        <% if (!currentUser) { %>
+                            <button class="btn btn-primary" type="button"><a href="/users/regist"></a>Regist</button>
+                            <button class="btn btn-success" type="button"><a href="/users/login"></a>Login</button>
+                            <% } else { %>
+                                <button class="btn btn-warning" type="button"><a href="/users/logout"></a>Logout</button>
+                                <% } %>
                     </div>
                 </div>
             </div>

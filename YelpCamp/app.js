@@ -44,14 +44,20 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'))
 
+
+//setting passport
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
-//setting flash properties in locals
+//setting local
 app.use((req, res, next) => {
+    //setting user logIn data
+    res.locals.currentUser = req.user;
+
+    //setting flash
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
