@@ -1,11 +1,11 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 const catchAsync = require('../utils/catchAsync')
 const Campground = require('../models/compground');
 const { campgroundSchema } = require('../models/Schema');
 const ExpressError = require('../utils/ExpressError');
-const isLoggedIn = require('../utils/isLoggIn')
-
+const isLoggedIn = require('../utils/isLoggIn');
+const isAuthor = require('../utils/isAuthor');
 //Error Handle - joi schema check campground
 const validateCampground = (req, res, next) => {
     const { error } = campgroundSchema.validate(req.body);
@@ -49,7 +49,7 @@ router.post('/', isLoggedIn, validateCampground, catchAsync(async(req, res) => {
 }));
 
 //Update - to edit
-router.get('/:id/edit', isLoggedIn, async(req, res) => {
+router.get('/:id/edit', isLoggedIn, isAuthor, async(req, res) => {
     const foundCampground = await Campground.findById(req.params.id);
     if (!foundCampground) {
         req.flash('error', 'Campground not found');
