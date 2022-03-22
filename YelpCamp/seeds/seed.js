@@ -21,6 +21,7 @@ const seedDB = async() => {
             title: `${getRandomValues(descriptors)} ${getRandomValues(places)}`,
             image: 'https://source.unsplash.com/collection/483251',
             price: randomPrice,
+            author: '6236ccfa069c658e6cd301c7'
 
         })
         await camp.save();
