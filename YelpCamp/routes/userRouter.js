@@ -8,7 +8,7 @@ router.get('/regist', (req, res, next) => {
     res.render('users/regist');
 });
 
-// post regist 
+// post regist account
 router.post('/', async(req, res, next) => {
     try {
         const { email, password, username } = req.body;
@@ -38,6 +38,7 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/users/
     res.redirect(redirectUrl);
 });
 
+//logout
 router.get('/logout', (req, res) => {
     req.logout();
     req.flash('success', 'Successfully logout!');
