@@ -29,7 +29,7 @@ router.get('/new', isLoggedIn, (req, res) => {
 });
 
 //Read - id
-router.get('/:id', isLoggedIn, catchAsync(async(req, res, next) => {
+router.get('/:id', catchAsync(async(req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findById(id).populate('reviews');
     if (!campground) {
