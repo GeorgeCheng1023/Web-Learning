@@ -26,11 +26,10 @@ router.get('', async(req, res) => {
 //Create a new
 router.get('/new', isLoggedIn, (req, res) => {
     res.render('campgrounds/new');
-
 });
 
 //Read - id
-router.get('/:id', catchAsync(async(req, res, next) => {
+router.get('/:id', isLoggedIn, catchAsync(async(req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findById(id).populate('reviews');
     if (!campground) {
@@ -41,7 +40,7 @@ router.get('/:id', catchAsync(async(req, res, next) => {
 }));
 
 //Create - post request
-router.post('/', validateCampground, catchAsync(async(req, res) => {
+router.post('/', isLoggedIn, validateCampground, catchAsync(async(req, res) => {
     const campground = new Campground(req.body.campground)
     await campground.save();
     req.flash('success', 'Successfully created campground');
@@ -49,7 +48,7 @@ router.post('/', validateCampground, catchAsync(async(req, res) => {
 }));
 
 //Update - to edit
-router.get('/:id/edit', async(req, res) => {
+router.get('/:id/edit', isLoggedIn, async(req, res) => {
     const foundCampground = await Campground.findById(req.params.id);
     if (!foundCampground) {
         req.flash('error', 'Campground not found');
@@ -59,7 +58,7 @@ router.get('/:id/edit', async(req, res) => {
 })
 
 //Update - put request
-router.put('/:id', validateCampground, catchAsync(async(req, res) => {
+router.put('/:id', isLoggedIn, validateCampground, catchAsync(async(req, res) => {
     if (!(req.body.campground)) throw new ExpressError('Your data is not available', 400);
     const campground = await Campground.findByIdAndUpdate(req.params.id, req.body.campground);
     req.flash('success', 'Successfully updated campground')

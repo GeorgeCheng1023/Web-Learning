@@ -4,8 +4,8 @@ const User = require('../models/user');
 const passport = require('passport');
 
 //get to regist page
-router.get('/register', (req, res, next) => {
-    res.render('users/register');
+router.get('/regist', (req, res, next) => {
+    res.render('users/regist');
 });
 
 // post regist 
@@ -18,7 +18,7 @@ router.post('/', async(req, res, next) => {
         res.redirect('/');
     } catch (e) {
         req.flash('error', 'Username or email already registered')
-        res.redirect('/users/register');
+        res.redirect('/users/regist');
     }
 });
 
@@ -32,5 +32,11 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/users/
     req.flash('success', 'Welcome back!');
     res.redirect('/');
 });
+
+router.get('/logout', (req, res) => {
+    req.logout();
+    req.flash('success', 'Successfully logout!');
+    res.redirect('/');
+})
 
 module.exports = router;
