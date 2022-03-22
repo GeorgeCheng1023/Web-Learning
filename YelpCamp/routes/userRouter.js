@@ -33,7 +33,10 @@ router.get('/login', async(req, res) => {
 //post login authentication
 router.post('/login', passport.authenticate('local', { failureRedirect: '/users/login', failureFlash: true }), async(req, res) => {
     req.flash('success', 'Welcome back!');
-    res.redirect('/');
+    const redirectUrl = req.session.returnTo || '/campgrounds';
+    console.log(redirectUrl);
+    Z
+    res.redirect(redirectUrl);
 });
 
 router.get('/logout', (req, res) => {
