@@ -10,14 +10,14 @@ router.get('/regist', userController.toRegist);
 // post regist account
 router.post('/', catchAsync(userController.regist));
 
-//get to login page
-router.get('/login', userController.toLogin);
 
-//post login authentication
-router.post('/login',
-    passport.authenticate('local', { failureRedirect: '/users/login', failureFlash: true }),
-    catchAsync(userController.login)
-);
+router.route('/login')
+    //get to login page
+    .get(userController.toLogin)
+    //post login authentication
+    .post(passport.authenticate('local', { failureRedirect: '/users/login', failureFlash: true }),
+        catchAsync(userController.login)
+    );
 
 //logout
 router.get('/logout', userController.logout);

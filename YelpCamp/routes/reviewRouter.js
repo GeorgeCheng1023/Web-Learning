@@ -7,10 +7,11 @@ const isLoggedIn = require('../utils/isLoggIn');
 const { isReviewAuthor } = require('../utils/isAuthor');
 const reviewController = require('../controllers/reviewController');
 
-router.get('/', catchAsync(reviewController.index))
-
-//Create review - get to reviews list
-router.post('/', isLoggedIn, validateReview, catchAsync(reviewController.new));
+router.route('/')
+    //get to index
+    .get(catchAsync(reviewController.index))
+    //Create review - get to reviews list
+    .post(isLoggedIn, validateReview, catchAsync(reviewController.new));
 
 //Delete review 
 router.delete('/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(reviewController.delete));

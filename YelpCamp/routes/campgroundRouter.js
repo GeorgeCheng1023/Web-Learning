@@ -7,41 +7,36 @@ const isLoggedIn = require('../utils/isLoggIn');
 const { isCampgroundAuthor } = require('../utils/isAuthor');
 const campgroundController = require('../controllers/campgroundController');
 
-//Read  - all
-router.get('/',
-    campgroundController.index);
+router.route('/')
+    //to index
+    .get(campgroundController.index)
+    //create new campground
+    .post(isLoggedIn,
+        validateCampground,
+        catchAsync(campgroundController.new));
 
-//Create a new
+//get to new page
 router.get('/new',
     isLoggedIn,
     campgroundController.toNew);
-//Read - id
-router.get('/:id',
-    catchAsync(campgroundController.showById));
 
-//Create - post request
-router.post('/',
-    isLoggedIn,
-    validateCampground,
-    catchAsync(campgroundController.new));
+router.route('/:id')
+    //get to show page
+    .get(catchAsync(campgroundController.showById))
+    //update campground
+    .put(isLoggedIn,
+        isCampgroundAuthor,
+        validateCampground,
+        catchAsync(campgroundController.update))
+    //delete campground
+    .delete(isLoggedIn,
+        isCampgroundAuthor,
+        catchAsync(campgroundController.delete));
 
 //Update - to edit
 router.get('/:id/edit',
     isLoggedIn,
     isCampgroundAuthor,
     catchAsync(campgroundController.toUpdate));
-
-//Update - put request
-router.put('/:id',
-    isLoggedIn,
-    isCampgroundAuthor,
-    validateCampground,
-    catchAsync(campgroundController.update));
-
-//Delete - delete request
-router.delete('/:id',
-    isLoggedIn,
-    isCampgroundAuthor,
-    catchAsync(campgroundController.delete))
 
 module.exports = router;
