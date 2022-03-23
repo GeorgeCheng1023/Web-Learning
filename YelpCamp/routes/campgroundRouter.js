@@ -4,7 +4,7 @@ const catchAsync = require('../utils/catchAsync')
 const Campground = require('../models/compground');
 const { validateCampground } = require('../utils/validate');
 const isLoggedIn = require('../utils/isLoggIn');
-const isAuthor = require('../utils/isAuthor');
+const { isCampgroundAuthor } = require('../utils/isAuthor');
 
 
 //Read  - all
@@ -46,7 +46,7 @@ router.post('/', isLoggedIn, validateCampground, catchAsync(async(req, res) => {
 }));
 
 //Update - to edit
-router.get('/:id/edit', isLoggedIn, isAuthor, async(req, res) => {
+router.get('/:id/edit', isLoggedIn, isCampgroundAuthor, async(req, res) => {
     const foundCampground = await Campground.findById(req.params.id);
     if (!foundCampground) {
         req.flash('error', 'Campground not found');
@@ -56,7 +56,7 @@ router.get('/:id/edit', isLoggedIn, isAuthor, async(req, res) => {
 })
 
 //Update - put request
-router.put('/:id', isLoggedIn, isAuthor, validateCampground, catchAsync(async(req, res) => {
+router.put('/:id', isLoggedIn, isCampgroundAuthor, validateCampground, catchAsync(async(req, res) => {
     if (!(req.body.campground)) throw new ExpressError('Your data is not available', 400);
     const campground = await Campground.findByIdAndUpdate(req.params.id, req.body.campground);
     req.flash('success', 'Successfully updated campground')
@@ -64,7 +64,7 @@ router.put('/:id', isLoggedIn, isAuthor, validateCampground, catchAsync(async(re
 }))
 
 //Delete - delete request
-router.delete('/:id', isLoggedIn, isAuthor, async(req, res) => {
+router.delete('/:id', isLoggedIn, isCampgroundAuthor, async(req, res) => {
     const campground = await Campground.findByIdAndDelete(req.params.id);
     req.flash('success', 'Successfully deleted campground')
     res.redirect('/campgrounds')

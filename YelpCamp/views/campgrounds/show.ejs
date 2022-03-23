@@ -62,9 +62,11 @@
                             <p class="card-text">
                                 <%=r.body%>
                             </p>
-                            <form action="/campgrounds/<%=campground._id%>/reviews/<%= r._id%>?_method=DELETE" method="post">
-                                <button class="btn btn-danger btn-sm">Delete</button>
-                            </form>
+                            <% if (currentUser && r.author.equals(currentUser._id)) { %>
+                                <form action="/campgrounds/<%=campground._id%>/reviews/<%= r._id%>?_method=DELETE" method="post">
+                                    <button class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                                <% } %>
                         </div>
                     </div>
                     <% } %>
