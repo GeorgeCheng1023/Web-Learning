@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 const multer = require('multer')
-const upload = multer({ dest: 'uploads/' })
+const { storage } = require('../cloudinary')
+const upload = multer({ storage })
 
 const catchAsync = require('../utils/catchAsync')
 const { validateCampground } = require('../utils/validate');
@@ -13,14 +14,11 @@ router.route('/')
     //to index
     .get(campgroundController.index)
     //create new campground
-    // .post(isLoggedIn,
-    //     validateCampground,
-    //     catchAsync(campgroundController.new));
     .post(
-        upload.single('image'),
-        (req, res) => {
-            res.send(req.file);
-        })
+        isLoggedIn,
+        upload.array('campground[images]'),
+        validateCampground,
+        catchAsync(campgroundController.new));
 
 //get to new page
 router.get('/new',
@@ -31,12 +29,14 @@ router.route('/:id')
     //get to show page
     .get(catchAsync(campgroundController.showById))
     //update campground
-    .put(isLoggedIn,
+    .put(
+        isLoggedIn,
         isCampgroundAuthor,
         validateCampground,
         catchAsync(campgroundController.update))
     //delete campground
-    .delete(isLoggedIn,
+    .delete(
+        isLoggedIn,
         isCampgroundAuthor,
         catchAsync(campgroundController.delete));
 
