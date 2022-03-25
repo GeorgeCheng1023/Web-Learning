@@ -79,11 +79,11 @@ app.all('*', (req, res, next) => {
 });
 
 //Error handler - undefind
-app.use((err, req, res, next) => {
-    const { statusCode = 500 } = err
-    if (!err.message) err.message = 'Something went wrong'
-    res.status(statusCode).render('error', { err });
-});
+// app.use((err, req, res, next) => {
+//     const { statusCode = 500 } = err
+//     if (!err.message) err.message = 'Something went wrong'
+//     res.status(statusCode).render('error', { err });
+// });
 
 app.listen(3000, () => {
     console.log("listening on port 3000");
