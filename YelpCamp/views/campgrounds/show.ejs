@@ -6,37 +6,53 @@
         <div class="row md-5">
             <div class="col-6">
                 <div class="card">
-                    <% for(let img of campground.images) { %>
-                        <image src="<%=img.url%>" alt="<%= img.filename%>"></image>
-                        <% } %>
-                            <div class="card-body">
-                                <h5 class="card-title">
-                                    <%= campground.title %>
-                                </h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            </div>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item txt-muted">
-                                    <%= campground.location%>
-                                </li>
-                                <li class="list-group-item">
-                                    Price: $
-                                    <%= campground.price%>
-                                </li>
-                                <li class="list-group-item">
-                                    Created by:
-                                    <%= campground.author.username%>
-                                </li>
-                            </ul>
-                            <div class="card-body">
-                                <a class="btn btn-primary" href="/campgrounds" class="card-link">Back</a>
-                                <% if (currentUser && campground.author.equals(currentUser._id)) { %>
-                                    <a class="btn btn-warning" href="/campgrounds/<%=campground._id%>/edit" class="card-link">Edit</a>
-                                    <form class="d-inline" action="/campgrounds/<%= campground._id%>?_method=DELETE" method="post">
-                                        <button class="btn btn-danger">Delete</button>
-                                    </form>
-                                    <% } %>
-                            </div>
+                    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <% campground.images.forEach((img, i) => { %>
+                                <div class="carousel-item <%= i == 0 ? 'active' : '' %> ">
+                                    <image class=" d-block w-100" src="<%=img.url%>" alt="<%= img.filename%>"></image>
+                                </div>
+                                <% })  %>
+                        </div>
+                        <% if (campground.images.length > 1) { %>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                            <% } %>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%= campground.title %>
+                        </h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item txt-muted">
+                            <%= campground.location%>
+                        </li>
+                        <li class="list-group-item">
+                            Price: $
+                            <%= campground.price%>
+                        </li>
+                        <li class="list-group-item">
+                            Created by:
+                            <%= campground.author.username%>
+                        </li>
+                    </ul>
+                    <div class="card-body">
+                        <a class="btn btn-primary" href="/campgrounds" class="card-link">Back</a>
+                        <% if (currentUser && campground.author.equals(currentUser._id)) { %>
+                            <a class="btn btn-warning" href="/campgrounds/<%=campground._id%>/edit" class="card-link">Edit</a>
+                            <form class="d-inline" action="/campgrounds/<%= campground._id%>?_method=DELETE" method="post">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                            <% } %>
+                    </div>
                 </div>
             </div>
             <div class="col-5">
