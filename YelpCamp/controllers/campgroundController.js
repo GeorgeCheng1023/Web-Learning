@@ -1,94 +1,76 @@
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
-}
+const Campground = require('../models/compground');
+module.exports.index = async(req, res) => {
+    const allCampgrounds = await Campground.find({});
+    res.render('campgrounds/index', { campgrounds: allCampgrounds });
+};
 
-const express = require('express');
-const mongoose = require('mongoose');
-const path = require('path');
-const ejsMate = require('ejs-mate');
-const methodOverride = require('method-override');
-const session = require('express-session');
-const flash = require('connect-flash');
-const app = express();
+module.exports.showById = async(req, res, next) => {
+    const { id } = req.params;
+    const campground = await Campground.findById(id)
+        //populate reviews author
+        .populate({
+            path: 'reviews',
+            populate: {
+                path: 'author'
+            }
+        })
+        //populate campground author
+        .populate('author');
 
-const passport = require('passport');
-const LocalStrategy = require('passport-local');
-const User = require('./models/user')
-
-const ExpressError = require('./utils/ExpressError');
-const campgroundRouter = require('./routes/campgroundRouter')
-const reviewRouter = require('./routes/reviewRouter');
-const userRouter = require('./routes/userRouter');
-
-//connet to mongo
-main().catch(err => console.log(err));
-async function main() {
-    await mongoose.connect('mongodb://localhost:27017/yelpcamp');
-}
-
-//setting session
-const sessionConfig = {
-    secret: 'secret',
-    saveUninitialized: true,
-    resave: true,
-    cookie: {
-        httpOnly: true,
-        expires: Date.now() + 1000 * 24 * 60 * 60 * 7
+    if (!campground) {
+        req.flash('error', 'Campground not found')
+        res.redirect('/campgrounds')
     }
-}
 
-app.use(session(sessionConfig));
-app.use(flash())
+    res.render('campgrounds/show', { campground })
+};
 
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'ejs');
-app.engine('ejs', ejsMate);
+//get to new page
+module.exports.toNew = (req, res) => {
+    res.render('campgrounds/new');
+};
 
-app.use(express.static(path.join(__dirname, 'public')))
-app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride('_method'))
+//post new
+module.exports.new = async(req, res) => {
+    const campground = new Campground(req.body.campground)
+    campground.images = req.files.map(file => ({
+        url: file.path,
+        filename: file.filename
+    }))
+    campground.author = req.user._id;
+    await campground.save();
+    req.flash('success', 'Successfully created campground');
+    res.redirect(`/campgrounds/${campground._id}`)
+};
 
+//get to update
+module.exports.toUpdate = async(req, res) => {
+    const foundCampground = await Campground.findById(req.params.id);
+    if (!foundCampground) {
+        req.flash('error', 'Campground not found');
+        res.redirect('/campgrounds')
+    }
+    res.render('campgrounds/edit', { campground: foundCampground });
+};
 
-//setting passport
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+//put to update
+module.exports.update = async(req, res) => {
+    console.log(req.body);
+    if (!(req.body.campground)) throw new ExpressError('Your data is not available', 400);
+    const campground = await Campground.findByIdAndUpdate(req.params.id, req.body.campground);
+    const imgs = req.files.map(file => ({
+        url: file.path,
+        filename: file.filename
+    }))
+    campground.images.push(...imgs);
+    await campground.save();
+    req.flash('success', 'Successfully updated campground');
+    res.redirect(`/campgrounds/${campground._id}`);
+};
 
-//setting local
-app.use((req, res, next) => {
-    //setting user logIn data
-    res.locals.currentUser = req.user;
-
-    //setting flash
-    res.locals.success = req.flash('success');
-    res.locals.error = req.flash('error');
-    next();
-})
-
-app.get('/', (req, res) => {
-    res.render('home')
-});
-
-
-//use router
-app.use('/campgrounds', campgroundRouter);
-app.use('/campgrounds/:id/reviews/', reviewRouter);
-app.use('/users', userRouter);
-
-//Error handler - page not found
-app.all('*', (req, res, next) => {
-    next(new ExpressError('Page Not Found', 404))
-});
-
-//Error handler - undefind
-app.use((err, req, res, next) => {
-    const { statusCode = 500 } = err
-    if (!err.message) err.message = 'Something went wrong'
-    res.status(statusCode).render('error', { err });
-});
-
-app.listen(3000, () => {
-    console.log("listening on port 3000");
-});
+//delete
+module.exports.delete = async(req, res) => {
+    const campground = await Campground.findByIdAndDelete(req.params.id);
+    req.flash('success', 'Successfully deleted campground');
+    res.redirect('/campgrounds');
+};
