@@ -32,6 +32,7 @@ router.route('/:id')
     .put(
         isLoggedIn,
         isCampgroundAuthor,
+        upload.array('campground[images]'),
         validateCampground,
         catchAsync(campgroundController.update))
     //delete campground

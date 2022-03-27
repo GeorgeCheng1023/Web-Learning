@@ -1,7 +1,7 @@
 <% layout('./layouts/boilerplate')%>
     <h1 class="text-center">Edit Campground</h1>
     <div class="col-6 offset-3">
-        <form class="needs-validation nonvalidate" action="/campgrounds/<%= campground._id%>?_method=PUT" method="post">
+        <form class="needs-validation nonvalidate" action="/campgrounds/<%= campground._id%>?_method=PUT" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
                 <input class="form-control" type="text" id="title" name="campground[title]" value="<%=campground.title %>" required>
@@ -18,8 +18,7 @@
                 </div>
             </div>
             <div class="mb-3">
-                <label class="form-label" for="location">Image URL</label>
-                <input class="form-control" type="text" id="image" name="campground[image]" value="<%=campground.image %>" required>
+                <input type="file" id="image" name="campground[images]" required multiple>
             </div>
             <div class="mb-3">
                 <button class="btn btn-success">Submit</button>
