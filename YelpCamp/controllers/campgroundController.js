@@ -3,6 +3,7 @@ module.exports.index = async(req, res) => {
     const allCampgrounds = await Campground.find({});
     res.render('campgrounds/index', { campgrounds: allCampgrounds });
 };
+const cloudinary = require('../cloudinary')
 
 module.exports.showById = async(req, res, next) => {
     const { id } = req.params;
@@ -55,6 +56,7 @@ module.exports.toUpdate = async(req, res) => {
 
 //put to update
 module.exports.update = async(req, res) => {
+    console.log(req.body);
     if (!(req.body.campground)) throw new ExpressError('Your data is not available', 400);
     const campground = await Campground.findByIdAndUpdate(req.params.id, req.body.campground);
     const imgs = req.files.map(file => ({
@@ -63,6 +65,12 @@ module.exports.update = async(req, res) => {
     }))
     campground.images.push(...imgs);
     await campground.save();
+    if (req.body.deleteImages) {
+        for (let filename of req.body.deleteImages) {
+            await cloudinary.v2.uploader.destroy(filename);
+        }
+        await campground.updateOne({ $pull: { images: { filename: { $in: req.body.deletImages } } } })
+    }
     req.flash('success', 'Successfully updated campground');
     res.redirect(`/campgrounds/${campground._id}`);
 };
