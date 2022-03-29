@@ -9,6 +9,7 @@ const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
 const session = require('express-session');
 const flash = require('connect-flash');
+const mongoSanitize = require('express-mongo-sanitize');
 const app = express();
 
 const passport = require('passport');
@@ -37,8 +38,16 @@ const sessionConfig = {
     }
 }
 
+//setting session and flash
 app.use(session(sessionConfig));
-app.use(flash())
+app.use(flash());
+
+//setting mongo sanitize
+app.use(
+    mongoSanitize({
+        replaceWith: '_',
+    }),
+);
 
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs');
